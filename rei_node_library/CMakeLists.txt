@@ -21,7 +21,7 @@ find_package(ament_cmake_ros REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 
-add_library(ReiNodeLibrary src/ReiNodeLibrary.cpp)
+add_library(ReiNodeLibrary src/ReiNodeLibrary.cpp src/rei_node.cpp src/rei_exceptions.cpp)
 target_include_directories(ReiNodeLibrary PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)

@@ -1,4 +1,4 @@
-#include "rei_node_library/ReiNodeLibrary.hpp"
+#include <rei_node_library/ReiNodeLibrary.hpp>
 
 namespace rei
 {
@@ -11,34 +11,44 @@ namespace node
  * CLASS: Interface_SimpleRosNode
  * */
 
-Interface_SimpleRosNode::Interface_SimpleRosNode()
+InterfaceBehaviorNode::InterfaceBehaviorNode(): 
+    control_mode(NodeControlMode::INITIALIZING)
 {
-
+    
 }
 
 // Abstract class, define virtual destructor
-Interface_SimpleRosNode::~Interface_SimpleRosNode()
+InterfaceBehaviorNode::~InterfaceBehaviorNode()
 {}
 
-void Interface_SimpleRosNode::initialization(bool debug, bool bypass_behavior)
+void InterfaceBehaviorNode::initialization(bool debug, bool bypass_behavior)
 {
     if (!initPre())
     {
         throw ExceptionPreInitialization();
     }
-    if (!initBehaviorModel())
+    if (!bypass_behavior)
     {
-        throw ExceptionBehaviorModelInitialization();
+        if (!initBehaviorModel())
+        {
+            throw ExceptionBehaviorModelInitialization();
+        }
+        if (!assignBehaviorActions())
+        {
+            throw ExceptionBehaviorActionAssignment();
+        }
+        if (!initSysGuards())
+        {
+            throw ExceptionSysGuardInitialization();
+        }
+        control_mode = NodeControlMode::BEHAVIOR_ON;
     }
-    if (!assignBehaviorActions())
+    else
     {
-        throw ExceptionBehaviorActionAssignment();
+        control_mode = NodeControlMode::BEHAVIOR_BYPASSED;       
     }
-    if (!initSysGuards())
-    {
-        throw ExceptionSysGuardInitialization();
-    }
-    if (!initMiddleware())
+    
+    if (!initMiddleware(debug, bypass_behavior))
     {
         throw ExceptionMiddlewareInitialization();
     }

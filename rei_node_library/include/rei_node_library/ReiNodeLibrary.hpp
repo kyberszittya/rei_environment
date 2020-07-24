@@ -10,13 +10,24 @@ namespace rei
 namespace node
 {
 
-class Interface_SimpleRosNode
+// TODO: we shall be cool with hybrid automatas wouldn't we? 
+// Let's make that library right away
+enum class NodeControlMode {
+  INITIALIZING,
+  BEHAVIOR_ON,
+  BEHAVIOR_BYPASSED,
+  WAITING,
+  ERROR
+};
+
+class InterfaceBehaviorNode
 {
 private:
+  NodeControlMode control_mode;
 public:
-  Interface_SimpleRosNode();
+  InterfaceBehaviorNode();
 
-  virtual ~Interface_SimpleRosNode() = 0;
+  virtual ~InterfaceBehaviorNode() = 0;
 
 
   /**
@@ -73,7 +84,7 @@ public:
    * 
    * RETURNS: initialization success (TRUE/FALSE)
    * */
-  virtual bool initMiddleware() = 0;
+  virtual bool initMiddleware(const bool debug, const bool bypass_behavior) = 0;
 
   /**
    * Abstract method
