@@ -14,7 +14,7 @@ In initialization step (method __initialize__), it can be specified whether to d
 - __initBehaviorModel()__: initialization of the behavior model based on the input specification or in a non-volatile case on a generated specific behavior.
 - __assignBehaviorActions()__: assignment of behavior actions related to the underlying behavior.
 - __initSysGuards()__: initialization of system and behavior guards.
-- __initMiddleware(bool debug, bool bypass behavior)__: initialziation of middleware of choice. Presumably generated based on a network model. Sets the initial initialization of debug dataflow and optionally disable  behavior related dataflow.
+- __initMiddleware(bool debug, bool enable_behavior)__: initialziation of middleware of choice. Presumably generated based on a network model. Sets the initial initialization of debug dataflow and optionally switch  behavior related dataflow.
 - __initPost()__: initialization class after middleware initialization.
 
 ![](initsequence.png)
@@ -25,7 +25,7 @@ The initialization method throws different exceptions during execution, each aft
 - __initBehaviorModel()__: throws _ExceptionBehaviorInitialization_.
 - __assignBehaviorActions()__: throws _ExceptionBehaviorActionAssignment_
 - __initSysGuards()__: throws _ExceptionSysGuardInitialization_.
-- __initMiddleware(bool debug, bool bypass behavior)__: throws _ExceptionNodeMiddleware_.
+- __initMiddleware(bool debug, bool enable_behavior)__: throws _ExceptionNodeMiddleware_.
 - __initPost()__: throws _ExceptionNodePostInitialization_.
 
 ![](reinodedesign-ExceptionHandling.png)

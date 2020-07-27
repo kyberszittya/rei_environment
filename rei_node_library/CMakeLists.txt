@@ -8,7 +8,7 @@ endif()
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 17)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -21,7 +21,8 @@ find_package(ament_cmake_ros REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 
-add_library(ReiNodeLibrary src/ReiNodeLibrary.cpp src/rei_node.cpp src/rei_exceptions.cpp)
+set(LIBRARY_SRC src/ReiNodeLibrary.cpp src/rei_node.cpp src/rei_exceptions.cpp)
+add_library(ReiNodeLibrary ${LIBRARY_SRC})
 target_include_directories(ReiNodeLibrary PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
@@ -56,6 +57,17 @@ if(BUILD_TESTING)
   # uncomment the line when this package is not in a git repo
   #set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
+  find_package(ament_cmake_cppcheck REQUIRED)
+  #ament_cppcheck()
+  find_package(ament_cmake_gmock REQUIRED)
+  find_package(ament_cmake_gtest REQUIRED)
+  include_directories(include)
+  include_directories(test)
+  ament_add_gmock(SimpleInteractionTest test/test_basic_node.cpp ${LIBRARY_SRC})
+  ament_target_dependencies(
+    SimpleInteractionTest
+    rclcpp
+  )
 endif()
 
 ament_export_include_directories(
